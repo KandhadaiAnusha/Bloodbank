@@ -1,0 +1,348 @@
+----------------------------------------------------------------------------------------------------------------------------MVC Table-----------------------------------------------------------------------------------------------------------------------------
+create schema BloodManagementSystem
+
+create table BloodManagementSystem.BloodDonorList
+
+(
+
+DonorId int Identity Primary Key,
+
+DonorName varchar(30),
+
+DonorWeight int,
+
+DonorHB decimal,
+
+DonorAddress varchar(50),
+
+DonorContact varchar(10),
+
+DonorBG varchar(30) );
+
+select * from BloodManagementSystem.BloodDonorList
+
+-------------------------------------------------------------------------------------------------------MVC Stored Procedure-------------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [Vibhuti].[USP_ValidateUser_Ruthiram]
+
+      
+ 	     @DonorName varchar(30),
+
+	     @DonorPassword varchar(30)			 				
+AS 
+
+  select DonorName from dbo.Ruthiram_Donor_Details_New1 where DonorName=@DonorName and DonorPassword=@DonorPassword
+
+RETURN 0
+-----------------------------------------------------------------------------------------------------------------MiniProject Tables-------------------------------------------------------------------------------------------------------------------------------
+
+   							
+                                                                                                                                             -- StockDetails Table---
+
+create table BloodManagementSystem.StockDetails
+
+(
+
+StockId int Identity Primary Key,
+
+StockBG varchar(30),
+
+StockBottles int,
+
+DateOfDonation datetime);
+
+
+ select * from BloodManagementSystem.StockDetails
+
+
+
+                                                                                                                                              StockDetails(SelectAll)
+
+CREATE PROCEDURE [Ruthiram].[USP_SelectAll_StockDetails]
+	
+AS
+	SELECT * from Ruthiram.StockDetails
+RETURN 0
+
+                                                                                                                                         
+
+								 StockDetails(Insert)
+
+CREATE PROCEDURE [Ruthiram].[USP_Insert_StockDetails1]
+             @stockId varchar(10),
+			 @stockBG varchar(30),
+			 @stockDOD datetime,
+			 @stockLocation varchar(30)
+AS
+    insert into Ruthiram.StockDetails(stockId,stockBG,stockDOD,stockLocation)
+	values( @stockId , @stockBG,@stockDOD,@stockLocation)
+RETURN 0
+
+
+
+
+
+                                                                                                                                                  StockDetails(Update)
+
+
+CREATE PROCEDURE [Ruthiram].[USP_Update_StockDetails]
+                @stockId varchar(10),
+				@stockLocation varchar(30)
+
+AS
+	update Ruthiram.StockDetails set stockLocation=@stockLocation where stockId=@stockId;
+RETURN 0
+
+
+
+
+                                                                                                                                                   StockDetails(Delete)
+
+
+CREATE PROCEDURE [Ruthiram].[USP_delete_StockDetails1]
+		@stockId varchar(10)
+	
+AS
+	delete Ruthiram.StockDetails where stockId =@stockId
+RETURN 0
+
+
+--------------------------------------------------------------------------------------------------------------------- DonorDetails(Table)----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                     DonorDetails(Insert)
+
+ CREATE PROCEDURE [Ruthiram].[USP_Insert_DonorDetails1]
+              @donorName varchar(30), 
+              @donorGender varchar(20),	
+			   @donorBG varchar(20),
+			   @donorWeight int,
+ 	      @donorDOD datetime,
+	      @donorHB varchar(10),
+              @donorContact varchar(10),
+	       @donorAddress varchar(30)
+AS
+    insert into Ruthiram.DonorDetails(donorName,donorGender,donorBG,donorWeight,donorDOD,donorHB,donorContact,donorAddress)
+	values(@donorName, @donorGender, @donorBG,@donorWeight,@donorDOD, @donorHB,@donorContact,@donorAddress)
+RETURN 0
+								
+
+								       DonorDetails(SelectAll)
+
+
+CREATE PROCEDURE [Ruthiram].[USP_SelectAll_DonorDetails]
+	
+AS
+	SELECT * from Ruthiram.DonorDetails
+RETURN 0
+
+
+
+								     
+								         DonorDetails(Update)
+
+
+CREATE PROCEDURE [Ruthiram].[USP_Update_DonorDetails1]
+                @donorId int,
+                @donorName varchar(30), 
+              @donorGender varchar(20),	
+			   @donorBG varchar(20),
+			   @donorWeight int,
+ 	      @donorDOD datetime,
+	      @donorHB varchar(10),
+              @donorContact varchar(10),
+	       @donorAddress varchar(30)
+
+AS
+	update Ruthiram.DonorDetails set donorName=@donorName,donorGender= @donorGender, donorBG=@donorBG,donorWeight=@donorWeight,donorDOD=@donorDOD,donorHB= @donorHB,donorContact=@donorContact,donorAddress=@donorAddress where donorId=@donorId;
+RETURN 0
+								
+								
+
+								 DonorDetails(Delete)
+
+
+CREATE PROCEDURE [Ruthiram].[USP_delete_DonorDetails]
+		@donorId int
+	
+AS
+	delete Ruthiram.DonorDetails where donorId =@donorId
+RETURN 0
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------Expired List(Table)-------------------------------------------------------------------------------------------------------------------
+
+
+create table Ruthiram.ExpiredStockDetails
+
+(
+
+stockId varchar(30),
+
+stockBloodGroup varchar(30),
+
+stockDOD DateTime,
+
+stockLocation varchar(30)
+
+)
+
+
+
+select *from Ruthiram.ExpiredStockDetails
+
+
+
+
+
+
+
+
+
+
+ 								           Expired List(Insert)
+
+
+CREATE PROCEDURE [Ruthiram].[USP_Insert_ExpiredStockDetails1]
+             @stockId varchar(30),
+			 @stockBloodGroup varchar(30),
+			 @stockDOD datetime,
+			 @stockLocation varchar(30)
+AS
+IF NOT EXISTS 
+    (   SELECT  stockId
+        FROM    Ruthiram.ExpiredStockDetails 
+        WHERE   stockId = @stockId       
+    )
+    insert into Ruthiram.ExpiredStockDetails(stockId,stockBloodGroup,stockDOD,stockLocation)
+	values( @stockId , @stockBloodGroup, @stockDOD, @stockLocation)
+	
+RETURN 0
+
+
+								              Expired List(SelectAll)
+
+
+
+
+CREATE PROCEDURE [Ruthiram].[USP_SelectAll_ExpiredStockDetails]
+	
+AS
+	SELECT * from Ruthiram.ExpiredStockDetails
+RETURN 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+								         
+                                                                                                                                                      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
